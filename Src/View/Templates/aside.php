@@ -17,7 +17,16 @@
  *
  */
 
+use Controller\UserController;
+use Controller\ArticleController;
+use Controller\CategoryController;
+use Controller\VisibilityController;
 
+$categoryController = new CategoryController();
+
+$userController = new UserController();
+$articleController = new ArticleController();
+$visibilityController = new VisibilityController();
 ?>
 
 
@@ -26,69 +35,55 @@
 
     <?php
 
-    include_once "Controller/UserController.php";
-    include_once "Controller/ArticleController.php";
-    include_once "Controller/CategoryController.php";
-    include_once "Controller/VisibilityController.php";
-
-    $categoryController = new CategoryController();
-
-    $userController = new UserController();
-    $articleController = new ArticleController();
-    $visibilityController = new VisibilityController();
-
-        if($_GET["site"] == "articleCreation"){
-
-            echo "<p class='menuTitle'>Save Article</p>
+    if ($_GET["site"] == "articleCreation") {
+        echo "<p class='menuTitle'>Save Article</p>
             <div class='menuWrapper'>
                 <select class='filterBox' name='visibilityFilter' id='categoryFilter' form='articleCreationForm'>";
 
-                if($userController->isAdmin() || $userController->isCurator()){
-                    $visibilities = $visibilityController->getAlVisibilities();
-                }else{
-                    $visibilities = $visibilityController->getUserVisibility();
-                }
+        if ($userController->isAdmin() || $userController->isCurator()) {
+            $visibilities = $visibilityController->getAlVisibilities();
+        } else {
+            $visibilities = $visibilityController->getUserVisibility();
+        }
 
-                foreach ($visibilities as $visibility){
-                    echo "<option value='".$visibility["id"]."'>".$visibility["name"]."</option>";
-                }
+        foreach ($visibilities as $visibility) {
+            echo "<option value='" . $visibility["id"] . "'>" . $visibility["name"] . "</option>";
+        }
 
-                echo "</select>
+        echo "</select>
                 <button type='submit' form='articleCreationForm' class='menuButtonDown'>Save Article</button>
             </div>
             <hr class='menuDivider'>";
 
-            if($_GET["site"] == "articleCreation" && isset($_GET["articleId"])){
+        if ($_GET["site"] == "articleCreation" && isset($_GET["articleId"])) {
+            $currentArticleId = $_GET["articleId"];
 
-                $currentArticleId = $_GET["articleId"];
-
-                echo "<div class='menuWrapper'>
+            echo "<div class='menuWrapper'>
                         <form  method='post' action='Controller/EventHandling.php'>
                             <p class='menuTitle'>Add Links</p>
                             <input type='text' class='menuInputTop' name='linkURL' id='linkURL' placeholder='URL' required>
                             <input type='text' class='menuInput' name='linkName' id='linkName' placeholder='Title' required>
-                            <input type='hidden' name='linkHidden' id='linkHidden' value='".$currentArticleId."'>
+                            <input type='hidden' name='linkHidden' id='linkHidden' value='" . $currentArticleId . "'>
                             <button type='submit' class='menuButtonDown'>Save Link</button>
                            </form>
                     </div>
                     <hr class='menuDivider'>";
-            }
-
         }
+    }
 
-        if($_GET["site"] == "articleView"){
-            echo "<p class='menuTitle'>Filter</p>
+    if ($_GET["site"] == "articleView") {
+        echo "<p class='menuTitle'>Filter</p>
                 <div class='menuWrapper'>
                 <form method='post' action='Controller/EventHandling.php'>
                 <select class='filterBox' name='categoryFilter' id='categoryFilter'>";
 
-            $categories = $categoryController->getAllCategories();
+        $categories = $categoryController->getAllCategories();
 
-            foreach ($categories as $category){
-                echo "<option value='".$category["id"]."'>".$category["name"]."</option>";
-            }
+        foreach ($categories as $category) {
+            echo "<option value='" . $category["id"] . "'>" . $category["name"] . "</option>";
+        }
 
-            echo "</select><br>
+        echo "</select><br>
                     <input type='hidden' id='filter' name='filter'>
                     <button class='menuButtonDown' type='submit'>Apply</button>
                 </form>
@@ -112,16 +107,16 @@
                 <hr class='menuDivider'>
                 
             ";
-        }
+    }
 
 
-        echo "
+    echo "
         <p class='menuTitle'>User</p>
          <div class='menuWrapper'>";
 
 
-        if ($userController->isAdmin()){
-            echo "
+    if ($userController->isAdmin()) {
+        echo "
             <form method='post' action='Controller/EventHandling.php'>
                  <input type='hidden' name='userCreation'>
                  <button class='menuButtonUp' type='submit'>Create User</button>
@@ -133,31 +128,31 @@
                    <input type='hidden' name='userEdit'>
                    <button class='menuButtonDown' type='submit'>Edit Profile</button>
                </form>";
-        }else{
-            echo "
+    } else {
+        echo "
             <form method='post' action='Controller/EventHandling.php'>
                    <input type='hidden' name='userEdit'>
                    <button class='menuButtonUp' type='submit'>Edit Profile</button>
                </form>";
-        }
-        echo"
+    }
+    echo "
         </div>
         
         <hr class='menuDivider'>";
 
 
     ?>
-    <div class='menuWrapper'>
+  <div class='menuWrapper'>
 
-        <form method="post" action="Controller/EventHandling.php">
-            <input type="hidden" name="articleView" id="articleView">
-            <button type="submit" class='menuButtonUp'>To Main Page</button>
-        </form>
+    <form method="post" action="Controller/EventHandling.php">
+      <input type="hidden" name="articleView" id="articleView">
+      <button type="submit" class='menuButtonUp'>To Main Page</button>
+    </form>
 
-        <form method="post" action="Controller/EventHandling.php">
-            <input type="hidden" name="logout" id="logout">
-            <button type="submit" class='menuButtonDown'>Logout</button>
-        </form>
-    </div>
+    <form method="post" action="Controller/EventHandling.php">
+      <input type="hidden" name="logout" id="logout">
+      <button type="submit" class='menuButtonDown'>Logout</button>
+    </form>
+  </div>
 
 </div>

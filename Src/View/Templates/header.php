@@ -17,24 +17,22 @@
  * @since 16.02.21
  *
  */
+use Controller\DbController;
 
 ?>
 
 <header>
-      <?php
+    <?php
 
-      include_once "./Controller/DbController.php";
+    session_start();
 
-      session_start();
+    ?>
 
-      ?>
+  <div class="headerBox">
 
-    <div class="headerBox">
-
-        <img src="./Media/obvita-ostschweizerischer-blindenfuersorgeverein_logo_big_de.jpg" alt="Obvita Logo"
-             class="logoImage">
-    </div>
-
+    <img src="./Media/obvita-ostschweizerischer-blindenfuersorgeverein_logo_big_de.jpg" alt="Obvita Logo"
+         class="logoImage">
+  </div>
 
 
 </header>

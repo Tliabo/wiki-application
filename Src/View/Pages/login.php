@@ -19,14 +19,14 @@
 
 <div class="loginContainer">
 
-    <form id="loginForm" method="post" action="Controller/EventHandling.php">
+  <form id="loginForm" method="post" action="Controller/EventHandling.php">
 
-        <input type="text" class="inputTop loginInput" id="usernameInput" name="usernameInput" placeholder="username" ><br>
-        <input type="password" id="passwordInput" class="login loginInput" name="passwordInput" placeholder="password"><br>
-        <input type="hidden" id="loginHidden" value="loginHidden" name="loginHidden">
-        <button type="submit" class="loginButton" id="submitLogin">Submit</button>
+    <input type="text" class="inputTop loginInput" id="usernameInput" name="usernameInput" placeholder="username"><br>
+    <input type="password" id="passwordInput" class="login loginInput" name="passwordInput" placeholder="password"><br>
+    <input type="hidden" id="loginHidden" value="loginHidden" name="loginHidden">
+    <button type="submit" class="loginButton" id="submitLogin">Submit</button>
 
-    </form>
+  </form>
 
 </div>
 

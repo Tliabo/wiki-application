@@ -17,8 +17,10 @@
  *
  */
 
-include_once "DbController.php";
-include_once "Model/DbCredentials.php";
+namespace Controller;
+
+use Controller\DbController;
+use Model\DbCredentials;
 
 class CategoryController
 {
@@ -30,17 +32,14 @@ class CategoryController
 
         $dbController = new DbController($dbCredentials);
 
-        $result = array();
+        $result = [];
 
         $tempResult = $dbController->executeQuery($statement);
 
         while ($category = mysqli_fetch_array($tempResult)) {
-
             array_push($result, $category);
-
         }
 
         return $result;
-
     }
 }

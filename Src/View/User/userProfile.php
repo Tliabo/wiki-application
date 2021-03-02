@@ -17,13 +17,13 @@
  */
 
 
-include_once "Controller/UserController.php";
-include_once "Controller/RoleController.php";
+use Controller\UserController;
+use Controller\RoleController;
 
 $userController = new UserController();
 $roleController = new RoleController();
 
-echo"
+echo "
 <div class='userCreationContainer'>
     <div class='container-fluid'>
         <form method='post' action='Controller/EventHandling.php' class='was-validated'>
@@ -36,12 +36,12 @@ echo"
             
             <div class='row' >
                 <div class='col-sm-2'>
-                    <input type='text' name='username' value='".$_SESSION["username"]."' class='form-control' disabled>
+                    <input type='text' name='username' value='" . $_SESSION["username"] . "' class='form-control' disabled>
                 </div>";
 
-                //ToDo: Load Password in box, Align Show Password Icon
+//ToDo: Load Password in box, Align Show Password Icon
 
-                echo"
+echo "
                 <div class='col-sm-2'>
                     <div class='input-group'>
                         <input type='password' name='changePassword' id='passwordInput' class='form-control' 
@@ -56,9 +56,9 @@ echo"
             
                 <div class='col-sm-2'>";
 
-                //ToDo: Email Output
+//ToDo: Email Output
 
-                echo"
+echo "
                     <div class='input-group mb-3'>
                         <select lass='custom-select' class='custom-select' disabled>
                             <option>coming soon</option>
@@ -68,14 +68,14 @@ echo"
                 
                 <div class='col-sm-2'>";
 
-                $userRoleId = $userController->getRoleOfUser();
+$userRoleId = $userController->getRoleOfUser();
 
-                $userRole = $roleController->getRoleName($userRoleId);
+$userRole = $roleController->getRoleName($userRoleId);
 
-                echo"
+echo "
                     <div class='input-group mb-3'>
                         <select lass='custom-select' class='custom-select' disabled>
-                            <option>".$userRole."</option>
+                            <option>" . $userRole . "</option>
                         </select>
                     </div>
                 </div>
@@ -95,8 +95,7 @@ echo"
 <hr class='menuDivider'>
 ";
 
-if($userController->isAdmin()){
-
+if ($userController->isAdmin()) {
     $users = $userController->getAllUsers();
 
     echo "
@@ -109,7 +108,7 @@ if($userController->isAdmin()){
             </div>
         </div>";
 
-    foreach ($users as $user){
+    foreach ($users as $user) {
         echo "
         
             <form method='post' action='Controller/EventHandling.php' class='was-validated'>
@@ -117,11 +116,11 @@ if($userController->isAdmin()){
                 <div class='row' >
             
                     <span class='col-sm-2'>
-                        <input type='text' name='username' value='".$user["username"]."' class='form-control' disabled>
+                        <input type='text' name='username' value='" . $user["username"] . "' class='form-control' disabled>
                     </span>
             
                     <span class='col-sm-2'>
-                         <input type='text' name='changePassword' id='changePassword' value='".$user["password"]."'
+                         <input type='text' name='changePassword' id='changePassword' value='" . $user["password"] . "'
                          class='form-control' required>
 
                          <div class='invalid-feedback'>Please fill out this field to change the password.</div>
@@ -129,29 +128,28 @@ if($userController->isAdmin()){
             
                     <input type='hidden' name='editProfile' id='editProfile'>
             
-                    <input type='hidden' name='userId' id='userId' value='".$user["id"]."'>
+                    <input type='hidden' name='userId' id='userId' value='" . $user["id"] . "'>
             
                     <span class='col-sm-2'>
-                       <input type='text' value='".$user["mail"]."'  class='form-control' disabled>
+                       <input type='text' value='" . $user["mail"] . "'  class='form-control' disabled>
                     </span>
             
                     <span class='col-sm-2'>
                         <div class='input-group mb-3'>
                             <select name='role' class='custom-select'>";
 
-                                $roles = $roleController->getAllRoles();
+        $roles = $roleController->getAllRoles();
 
-                                foreach ($roles as $role){
+        foreach ($roles as $role) {
+            if ($role["id"] == $user["role_fsid"]) {
+                echo "<option value='" . $role["id"] . "' selected>" . $role["name"] . "</option>";
+            } else {
+                echo "<option value='" . $role["id"] . "'>" . $role["name"] . "</option>";
+            }
+        }
 
-                                    if($role["id"] == $user["role_fsid"]){
-                                        echo "<option value='".$role["id"]."' selected>".$role["name"]."</option>";
-                                    }else{
-                                        echo "<option value='".$role["id"]."'>".$role["name"]."</option>";
-                                    }
-                                }
 
-
-                                echo "
+        echo "
                             </select>
                         </div>
                             

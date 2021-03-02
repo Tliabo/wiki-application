@@ -17,24 +17,24 @@
  *
  */
 
-include_once "DbController.php";
-include_once "Model/DbCredentials.php";
+namespace Controller;
+
+use Controller\DbController;
+use Model\DbCredentials;
 
 class VisibilityController
 {
 
     public function getAlVisibilities(): array
     {
-
         $dbCredentials = new DbCredentials();
         $dbController = new DbController($dbCredentials);
 
         return $dbController->getAll("visibility");
-
     }
 
 
-    public function getUserVisibility():array
+    public function getUserVisibility(): array
     {
         $dbCredentials = new DbCredentials();
         $dbController = new DbController($dbCredentials);

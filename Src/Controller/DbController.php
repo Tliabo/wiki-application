@@ -16,10 +16,11 @@
  *
  */
 
+namespace Controller;
 
-use DbCredentials\DbCredentials;
+use Model\DbCredentials;
 
- $connection = null;
+$connection = null;
 
 class DbController
 {
@@ -40,7 +41,7 @@ class DbController
 
         $this->dbCredentials = $dbCredentials;
 
-        if ($connection == null){
+        if ($connection == null) {
             $this->getDbConnection();
         }
 
@@ -54,28 +55,25 @@ class DbController
     }
 
 
-
     //Connection Function
     function dbConnect()
     {
-
         global $connection;
 
         $tempCredentialObj = $this->getDbCredentials();
         $tempCredential = $tempCredentialObj->getCredentials();
 
         $connection = new mysqli(
-            $tempCredential["DB_SERVER"],
-            $tempCredential["DB_USERNAME"],
-            $tempCredential["DB_PASSWORD"],
-            $tempCredential["DB_NAME"]
+          $tempCredential["DB_SERVER"],
+          $tempCredential["DB_USERNAME"],
+          $tempCredential["DB_PASSWORD"],
+          $tempCredential["DB_NAME"]
         );
 
 
         if ($connection->connect_error) {
             die($connection->connect_error);
         }
-
     }
 
     function getDbConnection()
@@ -90,30 +88,26 @@ class DbController
     }
 
 
-
-    public function isConnected():bool
+    public function isConnected(): bool
     {
         global $connection;
 
-        if($connection != null) {
+        if ($connection != null) {
             $this->isConnected = true;
-        }else{
+        } else {
             $this->isConnected = false;
         }
 
-        return  $this->isConnected;
+        return $this->isConnected;
     }
-
 
 
     public function createDbTables()
     {
-
         global $connection;
 
 
-        if($this->isConnected() == true) {
-
+        if ($this->isConnected() == true) {
             //create roles
             $sql = "CREATE TABLE IF NOT EXISTS roles(
                 id INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
@@ -128,12 +122,9 @@ class DbController
             $resultRoles = $this->executeQuery($statementRoles);
 
             if ($resultRoles->num_rows < 1) {
-
                 $statement = "INSERT INTO `roles` (`id`, `name`) VALUES (NULL, 'admin'), 
                                           (NULL, 'redaktor'), (NULL, 'user'),(NULL,'disabled');";
                 $this->executeQuery($statement);
-
-
             }
 
 
@@ -151,12 +142,9 @@ class DbController
             $resultCategory = $this->executeQuery($statementCategory);
 
             if ($resultCategory->num_rows < 1) {
-
                 $statement = "INSERT INTO `category` (`id`, `name`) VALUES (NULL, 'news'), (NULL, 'general')";
                 $this->executeQuery($statement);
-
             }
-
 
 
             //create visibility
@@ -173,7 +161,6 @@ class DbController
             $resultVisibility = $this->executeQuery($statementGroups);
 
             if ($resultVisibility->num_rows < 1) {
-
                 $statement = "INSERT INTO `visibility` (`id`, `name`) VALUES (NULL, 'draft'), (NULL, 'open'), 
                                                (NULL, 'internal'), (NULL, 'full'), (NULL, 'edited'), (NULL, 'external')";
                 $this->executeQuery($statement);
@@ -193,10 +180,8 @@ class DbController
             $resultGroups = $resultRoles = $this->executeQuery($statementGroups);
 
             if ($resultGroups->num_rows < 1) {
-
                 $statement = "INSERT INTO `groups` (`id`, `name`) VALUES (NULL, 'internal'), (NULL, 'external')";
                 $this->executeQuery($statement);
-
             }
 
 
@@ -280,133 +265,110 @@ class DbController
             $resultUser = $resultRoles = $this->executeQuery($statementUser);
 
             if ($resultUser->num_rows < 1) {
-
                 $adminPassword = "%%21b81D";
                 $hashedAdminPassword = password_hash($adminPassword, PASSWORD_DEFAULT);
 
                 $statement = "INSERT INTO `user` (`id`, `username`,`mail`,`password`,`group_fsid`,`role_fsid`) 
-                VALUES (NULL, 'admin','admin@admin.com','".$hashedAdminPassword."',1,1)";
+                VALUES (NULL, 'admin','admin@admin.com','" . $hashedAdminPassword . "',1,1)";
                 $this->executeQuery($statement);
             }
         }
-
     }
 
 
     public function executeQuery($statement)
     {
-
         return mysqli_query($this->getDbConnection(), $statement);
-
     }
 
 
-    public function getAll($table):array
+    public function getAll($table): array
     {
+        $statement = "SELECT * FROM " . $table . " ";
 
-        $statement = "SELECT * FROM ".$table." ";
-
-        $result = array();
+        $result = [];
 
         $tempResult = $this->executeQuery($statement);
 
         while ($entry = mysqli_fetch_array($tempResult)) {
-
             array_push($result, $entry);
-
         }
 
         return $result;
     }
 
-    public function getAllBy($table, $condition, $conditionCheck):array
+    public function getAllBy($table, $condition, $conditionCheck): array
     {
-        $statement = "SELECT * FROM ".$table." WHERE ".$condition."='".$conditionCheck."'";
+        $statement = "SELECT * FROM " . $table . " WHERE " . $condition . "='" . $conditionCheck . "'";
 
-        $result = array();
+        $result = [];
 
         $tempResult = $this->executeQuery($statement);
 
         while ($entry = mysqli_fetch_array($tempResult)) {
-
             array_push($result, $entry);
-
         }
 
         return $result;
     }
 
-    public function getAllByAnd($table,$condition1,$conditionCheck1,$condition2,$conditionCheck2):array
+    public function getAllByAnd($table, $condition1, $conditionCheck1, $condition2, $conditionCheck2): array
     {
-        $statement = "SELECT * FROM `".$table."` WHERE ".$condition1."='".$conditionCheck1."' 
-        AND ".$condition2."='".$conditionCheck2."'";
+        $statement = "SELECT * FROM `" . $table . "` WHERE " . $condition1 . "='" . $conditionCheck1 . "' 
+        AND " . $condition2 . "='" . $conditionCheck2 . "'";
 
-        $result = array();
+        $result = [];
 
         $tempResult = $this->executeQuery($statement);
 
         while ($entry = mysqli_fetch_array($tempResult)) {
-
             array_push($result, $entry);
-
         }
 
         return $result;
-
     }
 
-    public function getAllByOr($table,$condition1,$conditionCheck1,$condition2,$conditionCheck2):array
+    public function getAllByOr($table, $condition1, $conditionCheck1, $condition2, $conditionCheck2): array
     {
-        $statement = "SELECT * FROM `".$table."` WHERE `".$condition1."`=".$conditionCheck1." 
-        OR `".$condition2."`=".$conditionCheck2;
+        $statement = "SELECT * FROM `" . $table . "` WHERE `" . $condition1 . "`=" . $conditionCheck1 . " 
+        OR `" . $condition2 . "`=" . $conditionCheck2;
 
-        $result = array();
+        $result = [];
 
         $tempResult = $this->executeQuery($statement);
 
         while ($entry = mysqli_fetch_array($tempResult)) {
-
             array_push($result, $entry);
-
         }
 
         return $result;
-
     }
 
 
-
-    public function doesExist($table, $tableRow, $toCheck):bool
+    public function doesExist($table, $tableRow, $toCheck): bool
     {
-
         //ToDO: Change to prevent SQL Injections
 
-        $statement = "SELECT * FROM ".$table." WHERE ".$tableRow." = '".$toCheck."'";
+        $statement = "SELECT * FROM " . $table . " WHERE " . $tableRow . " = '" . $toCheck . "'";
 
         error_log($statement);
 
         $tempResult = $this->executeQuery($statement);
 
-        if ($tempResult->num_rows > 0){
+        if ($tempResult->num_rows > 0) {
             $doesExist = true;
-        }else{
+        } else {
             $doesExist = false;
         }
 
         return $doesExist;
-
     }
-
 
 
     //ToDO: Function to call for every user Input, to make sure, SQL Injections aren't possible
-    public function invalidateSQLInjection($sqlQuery, $userInput){
-
+    public function invalidateSQLInjection($sqlQuery, $userInput)
+    {
     }
-
-
-
-
 
 
 }

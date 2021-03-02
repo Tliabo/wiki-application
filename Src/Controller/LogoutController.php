@@ -17,7 +17,9 @@
  *
  */
 
-include_once "SessionController.php";
+namespace Controller;
+
+use Controller\SessionController;
 
 class LogoutController
 {

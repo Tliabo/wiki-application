@@ -17,6 +17,8 @@
  *
  */
 
+namespace Controller;
+
 include_once "DbController.php";
 include_once "Model/DbCredentials.php";
 

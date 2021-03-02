@@ -17,8 +17,10 @@
  *
  */
 
-include_once "DbController.php";
-include_once "Model/DbCredentials.php";
+namespace Controller;
+
+use Controller\DbController;
+use Model\DbCredentials;
 
 class GroupController
 {

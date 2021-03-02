@@ -19,34 +19,28 @@
  */
 
 
-include_once "Controller/UserController.php";
+use Controller\UserController;
+
 $userController = new UserController();
 
 
-if(isset($_GET["site"])){
-    if($_GET["site"] != "login"){
+if (isset($_GET["site"])) {
+    if ($_GET["site"] != "login") {
+        ?>
+      <aside>
+        <?php
 
-
-
-?>
-<aside>
-    <?php
-
-    if(isset($_SESSION["sessionID"]) != null){
-
-        if($userController->getRoleOfUser() != "4") {
-
-            include_once "aside.php";
-
+        if (isset($_SESSION["sessionID"]) != null) {
+            if ($userController->getRoleOfUser() != "4") {
+                include_once "aside.php";
+            }
         }
-
     }
-}
 
     ?>
-</aside>
+  </aside>
 
-<?php
+    <?php
 }
 ?>
 
@@ -54,22 +48,25 @@ if(isset($_GET["site"])){
     <?php
 
 
-    if(isset($_SESSION["sessionID"]) != null && isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true){
-
-        if($_GET["site"] == "articleView"){
+    if (isset($_SESSION["sessionID"]) != null && isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
+        if ($_GET["site"] == "articleView") {
             include_once("View/Article/articleView.php");
-        }else if($_GET["site"] == "articleCreation"){
-            include_once("View/Article/articleCreationView.php");
-        }else if($_GET["site"] == "userCreation"){
-            include_once ("View/User/userCreation.php");
-        }else if($_GET["site"] == "userProfile"){
-            include_once ("View/User/userProfile.php");
-        }else{
-            header('location: http://localhost/wiki/?site=articleView');
+        } else {
+            if ($_GET["site"] == "articleCreation") {
+                include_once("View/Article/articleCreationView.php");
+            } else {
+                if ($_GET["site"] == "userCreation") {
+                    include_once("View/User/userCreation.php");
+                } else {
+                    if ($_GET["site"] == "userProfile") {
+                        include_once("View/User/userProfile.php");
+                    } else {
+                        header('location: http://localhost/wiki/?site=articleView');
+                    }
+                }
+            }
         }
-
-    }else {
-
+    } else {
         if ($_GET["site"] == "login") {
             include_once("./View/Pages/login.php");
         } else {

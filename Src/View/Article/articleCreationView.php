@@ -1,10 +1,10 @@
 <?php
 
-include_once "Controller/CategoryController.php";
-include_once "Controller/ArticleController.php";
-include_once "Controller/UserController.php";
-include_once "Controller/VisibilityController.php";
-include_once "Controller/LinkController.php";
+use Controller\CategoryController;
+use Controller\ArticleController;
+use Controller\UserController;
+use Controller\VisibilityController;
+use Controller\LinkController;
 
 $categoryController = new CategoryController();
 
@@ -19,32 +19,31 @@ $linkController = new LinkController();
 
 
 <div class="articleContainer">
-    <div class='articleBox'>
-        <form id="articleCreationForm" method="post" action="Controller/EventHandling.php" class="was-validated">
-            <div class='container-fluid'>
-                <div class='row'>
+  <div class='articleBox'>
+    <form id="articleCreationForm" method="post" action="Controller/EventHandling.php" class="was-validated">
+      <div class='container-fluid'>
+        <div class='row'>
 
-                    <?php
+            <?php
 
-                    $currentUser = $_SESSION["username"];
+            $currentUser = $_SESSION["username"];
 
-                    if(isset($_GET["articleId"]) && $articleController->hasPermissionToEdit($_GET["articleId"])){
+            if (isset($_GET["articleId"]) && $articleController->hasPermissionToEdit($_GET["articleId"])){
+                $articleId = $_GET["articleId"];
 
-                        $articleId = $_GET["articleId"];
+                $loadedArticle = $articleController->getArticleById($articleId);
 
-                        $loadedArticle = $articleController->getArticleById($articleId);
-
-                    ?>
-                    <span class='col-sm-2'>
+                ?>
+              <span class='col-sm-2'>
                         <div class="input-group mb-3">
                             <select id="articleCategory" name="articleCategory" class="custom-select" required>
                                  <option value="" hidden>Category</option>
                                  <?php
 
-                                     foreach ($categories as $category){
-                                        echo "<option value='".$category["id"]."'>".$category["name"]."</option>";
-                                     }
-                                ?>
+                                 foreach ($categories as $category) {
+                                     echo "<option value='" . $category["id"] . "'>" . $category["name"] . "</option>";
+                                 }
+                                 ?>
 
                             </select>
 
@@ -53,12 +52,12 @@ $linkController = new LinkController();
                         </div>
                     </span>
 
-                    <?php
+                <?php
 
-                        echo"
+                echo "
                     <span class='col-sm-8'>
                         <input type=text id='articleTitle' name='articleTitle' class='articleTitleEdit' 
-                        placeholder='Title' value='".$loadedArticle[0][2]."' required>
+                        placeholder='Title' value='" . $loadedArticle[0][2] . "' required>
                             
                         <div class='valid-feedback'>Valid.</div>
                         <div class='invalid-feedback'>Please fill out this field.</div>
@@ -72,7 +71,7 @@ $linkController = new LinkController();
                 <div class='row'>
         
                     <input type='hidden' id='articleHiddenUpdate' name='articleHiddenUpdate'>
-                    <input type='hidden' id='articleId' name='articleId' value='".$loadedArticle[0][0]."'>
+                    <input type='hidden' id='articleId' name='articleId' value='" . $loadedArticle[0][0] . "'>
         
                     <span class='col-sm-1'>
                         
@@ -80,7 +79,7 @@ $linkController = new LinkController();
                         
                     <span class='col-sm-10'>
                         <textarea id='articleText' name='articleText' class='articleText'required>
-                        ".$loadedArticle[0][3]."</textarea>
+                        " . $loadedArticle[0][3] . "</textarea>
                             
                        <div class='valid-feedback'>Valid.</div>
                        <div class='invalid-feedback'>Please fill out this field.</div>
@@ -99,33 +98,31 @@ $linkController = new LinkController();
                             
                     <span class='col-sm-10'>";
 
-                        $links = $linkController->getAllLinksFromArticle($_GET["articleId"]);
+                $links = $linkController->getAllLinksFromArticle($_GET["articleId"]);
 
-                        foreach ($links as $link) {
-                            echo "<a href='" . $link["url"] . "' target='_blank'>" . $link["title"] . "</a>";
-                        }
+                foreach ($links as $link) {
+                    echo "<a href='" . $link["url"] . "' target='_blank'>" . $link["title"] . "</a>";
+                }
 
-                        echo " 
+                echo " 
                     </span>
  
                     <span class='col-sm-2'>
                             
                     </span>
                 </div>";
+            }else{
+            ?>
 
-                }else{
-
-                    ?>
-
-                <br>
-                    <span class="col-sm-2">
+          <br>
+          <span class="col-sm-2">
                           <div class="input-group mb-3">
                               <select id="articleCategory" name="articleCategory" class="custom-select" required>
                                  <option value="" hidden>Category</option>
                                  <?php
 
-                                 foreach ($categories as $category){
-                                     echo "<option value='".$category["id"]."'>".$category["name"]."</option>";
+                                 foreach ($categories as $category) {
+                                     echo "<option value='" . $category["id"] . "'>" . $category["name"] . "</option>";
                                  }
                                  ?>
 
@@ -136,7 +133,7 @@ $linkController = new LinkController();
                         </div>
                     </span>
 
-                    <span class="col-sm-8">
+          <span class="col-sm-8">
                         <input type="text" id="articleTitle" name="articleTitle" class='articleTitleEdit'
                                placeholder="Title" required>
 
@@ -144,31 +141,31 @@ $linkController = new LinkController();
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </span>
 
-                    <span class="col-sm-2"></span>
+          <span class="col-sm-2"></span>
 
-                </div>
+        </div>
 
-                <input type="hidden" id="articleHidden" name="articleHidden" value="articleHidden" required>
+        <input type="hidden" id="articleHidden" name="articleHidden" value="articleHidden" required>
 
-                <div class="row">
+        <div class="row">
 
-                    <span class="col-sm-1"></span>
+          <span class="col-sm-1"></span>
 
-                    <span class="col-sm-10">
+          <span class="col-sm-10">
                         <textarea id="articleText" name="articleText" class="articleText" required></textarea>
 
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </span>
 
-                    <span class="col-sm-1"></span>
+          <span class="col-sm-1"></span>
 
-                <?php
-                }
-                ?>
+            <?php
+            }
+            ?>
 
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
+  </div>
 
 </div>

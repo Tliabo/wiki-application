@@ -17,9 +17,11 @@
  *
  */
 
-include_once "DbController.php";
-include_once "Model/DbCredentials.php";
-include_once "UserController.php";
+namespace Controller;
+
+use Controller\DbController;
+use Model\DbCredentials;
+use Controller\UserController;
 
 class SessionController
 {

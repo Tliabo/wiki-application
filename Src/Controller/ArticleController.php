@@ -17,8 +17,10 @@
  *
  */
 
-include_once "DbController.php";
-include_once "Model/DbCredentials.php";
+namespace Controller;
+
+include_once 'DbController';
+include_once "../Model/DbCredentials.php";
 
 include_once "SessionController.php";
 include_once "UserController.php";

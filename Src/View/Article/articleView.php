@@ -15,16 +15,17 @@
  * @since 17.02.21
  *
  */
+
+use Controller\ArticleController;
+use Controller\UserController;
+use Controller\LinkController;
+
 ?>
 
 
 <div class="articleContainer" id="articleContainer">
 
     <?php
-        include_once "Controller/ArticleController.php";
-        include_once "Controller/UserController.php";
-        include_once "Controller/LinkController.php";
-
         $articleController = new ArticleController();
         $userController = new UserController();
         $linkController = new LinkController();
